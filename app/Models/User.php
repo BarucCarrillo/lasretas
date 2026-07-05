@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -28,5 +29,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    //one user can be captain of many teams
+    public function captainedTeams() : HasMany 
+    {
+        return $this->hasMany(Team::class, 'captain_id');    
+    }
+
+    //one user can have many favorites
+    public function favorites() : HasMany 
+    {
+        return $this->hasMany(Favorite::class);
     }
 }

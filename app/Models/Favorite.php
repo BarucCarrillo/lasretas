@@ -3,8 +3,27 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Favorite extends Model
 {
     //
+    protected $fillable = [
+        'tenant_id',
+        'user_id',
+        'favoritable_id',
+        'favoritable_type',
+    ];
+
+    //one favorite belongs to one user
+    public function user() : BelongsTo 
+    {
+        return $this->belongsTo(User::class);    
+    }
+
+    public function favoritable() : MorphTo 
+    {
+        return $this->morphTo();    
+    }
 }

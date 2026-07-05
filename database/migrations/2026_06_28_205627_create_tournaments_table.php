@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tournaments', function (Blueprint $table) {
             $table->id();
+            $table->foreignUuid('tenant_id')->constrained('tenants')->onDelete('cascade');
             $table->foreignId('leagues_id')->constrained('leagues')->onDelete('cascade');
             $table->string('name');
             $table->enum('format', ['league', 'liguilla', 'knockout'])->default('liguilla');
