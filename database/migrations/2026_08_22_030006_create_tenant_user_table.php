@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teams', function (Blueprint $table) {
+        Schema::create('tenant_user', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('tenant_id')->constrained('tenants')->onDelete('cascade');
-            $table->foreignId('tournament_id')->constrained('tournaments')->onDelete('cascade');
-            $table->foreignUuid('captain_id')->constrained('users')->onDelete('cascade');
-            $table->string('name');
-            $table->string('logo')->nullable();
-            $table->boolean('is_visible')->default(true);
+            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('role')->default('admin'); //admin, staff, ref
             $table->timestamps();
-
-            $table->unique(['tournament_id', 'captain_id']);
         });
     }
 
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teams');
+        Schema::dropIfExists('tenant_user');
     }
 };
