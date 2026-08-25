@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUuid('tenant_id')->constrained('tenants')->onDelete('cascade');
             $table->foreignId('league_id')->constrained('leagues')->onDelete('cascade');
             $table->string('name');
+            $table->string('logo')->nullable();
             $table->enum('format', ['league', 'liguilla', 'knockout'])->default('liguilla');
             $table->integer('playoff_teams_count')->nullable();
             $table->boolean('penalties_extra_point')->default(false);

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignUuid('tenant_id')->constrained('tenants')->onDelete('cascade');
             $table->string('name');
+            $table->string('logo')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });
