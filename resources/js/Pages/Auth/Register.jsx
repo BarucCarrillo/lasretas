@@ -34,7 +34,7 @@ export default function Register() {
                     <TextInput
                         id="first_name"
                         name="first_name"
-                        value={data.first_namename}
+                        value={data.first_name}
                         className="mt-1 block w-full"
                         autoComplete="give-name"
                         isFocused={true}
@@ -42,7 +42,7 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.name} className="mt-2" />
+                    <InputError message={errors.first_name} className="mt-2" />
                 </div>
 
                 <div className="mt-4">
@@ -57,7 +57,7 @@ export default function Register() {
                         onChange={(e) => setData('last_name', e.target.value)}
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError message={errors.last_name} className="mt-2" />
                 </div>
 
                 <div className="mt-4">

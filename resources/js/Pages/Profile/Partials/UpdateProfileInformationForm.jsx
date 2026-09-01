@@ -30,41 +30,40 @@ export default function UpdateProfileInformation({
         <section className={className}>
             <header>
                 <h2 className="text-lg font-medium text-gray-900">
-                    Profile Information
+                    Información
                 </h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
+                    Actuliza la información de tu cuenta y tu correo electrónico si lo deseas.
                 </p>
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Nombre" />
+                    <InputLabel htmlFor="first_name" value="Nombre" />
 
                     <TextInput
-                        id="name"
+                        id="first_name"
                         className="mt-1 block w-full"
                         value={data.first_name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
+                        onChange={(e) => setData('first_name', e.target.value)}
                         isFocused
-                        autoComplete="name"
+                        autoComplete="given-name"
                     />
 
-                    <InputError className="mt-2" message={errors.name} />
+                    <InputError className="mt-2" message={errors.first_name} />
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="name" value="Apellidos (Opcional)" />
+                    <InputLabel htmlFor="last_name" value="Apellidos (Opcional)" />
 
                     <TextInput
-                        id="name"
+                        id="last_name"
                         className="mt-1 block w-full"
                         value={data.last_name}
-                        onChange={(e) => setData('name', e.target.value)}
+                        onChange={(e) => setData('last_name', e.target.value)}
                         isFocused
-                        autoComplete="name"
+                        autoComplete="family-name"
                     />
 
                     <InputError className="mt-2" message={errors.last_name} />
