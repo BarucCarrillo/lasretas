@@ -14,8 +14,10 @@ export default function UpdateProfileInformation({
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
-            name: user.name,
+            first_name: user.first_name,
+            last_name: user.last_name,
             email: user.email,
+            phone: user.phone,
         });
 
     const submit = (e) => {
@@ -38,12 +40,12 @@ export default function UpdateProfileInformation({
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="name" value="Nombre" />
 
                     <TextInput
                         id="name"
                         className="mt-1 block w-full"
-                        value={data.name}
+                        value={data.first_name}
                         onChange={(e) => setData('name', e.target.value)}
                         required
                         isFocused
@@ -51,6 +53,21 @@ export default function UpdateProfileInformation({
                     />
 
                     <InputError className="mt-2" message={errors.name} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="name" value="Apellidos (Opcional)" />
+
+                    <TextInput
+                        id="name"
+                        className="mt-1 block w-full"
+                        value={data.last_name}
+                        onChange={(e) => setData('name', e.target.value)}
+                        isFocused
+                        autoComplete="name"
+                    />
+
+                    <InputError className="mt-2" message={errors.last_name} />
                 </div>
 
                 <div>
@@ -67,6 +84,22 @@ export default function UpdateProfileInformation({
                     />
 
                     <InputError className="mt-2" message={errors.email} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="email" value="Número de Celular (Opcional)" />
+
+                    <TextInput
+                        id="phone"
+                        type="number"
+                        name="phone"
+                        value={data.phone}
+                        className="mt-1 block w-full"
+                        autoComplete="phone"
+                        onChange={(e) => setData('phone', e.target.value)}
+                    />
+
+                    <InputError message={errors.phone} className="mt-2" />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (
