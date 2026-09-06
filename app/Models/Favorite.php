@@ -10,7 +10,6 @@ class Favorite extends Model
 {
     //
     protected $fillable = [
-        'tenant_id',
         'user_id',
         'favoritable_id',
         'favoritable_type',

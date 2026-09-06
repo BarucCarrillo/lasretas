@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Matches extends Model
 {
+    use BelongsToTenant;
     //
     protected $table = 'matches';
     
     protected $fillable = [
-        'tenant_id',
         'tournament_id',
         'local_team_id',
         'visitor_team_id',

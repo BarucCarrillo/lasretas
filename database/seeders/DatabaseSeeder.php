@@ -87,6 +87,7 @@ class DatabaseSeeder extends Seeder
             'tenant_id' => $tenant->id,
             'name' => 'Liga Dominical Libre',
             'description' => 'El mejor torneo de los domingos por la mañana.',
+            'slug' => 'dominical-libre'
         ]);
 
         $torneo = Tournament::create([
