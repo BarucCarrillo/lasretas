@@ -54,7 +54,7 @@ export default function Create({ auth }) {
 
                             <div className="flex items-center justify-end mt-4">
                                 <PrimaryButton className="ml-4" disabled={processing}>
-                                    Crear Espacio de Trabajo
+                                    Crear Cancha
                                 </PrimaryButton>
                             </div>
                         </form>

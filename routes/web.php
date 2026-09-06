@@ -27,4 +27,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/onboarding/cancha', [TenantController::class, 'store'])->name('tenant.store');
 });
 
+Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Tenants/Dashboard');
+    })->name('tenant.dashboard');
+});
+
 require __DIR__.'/auth.php';
