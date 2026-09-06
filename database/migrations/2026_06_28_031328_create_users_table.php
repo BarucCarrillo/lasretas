@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default('user'); //user, superadmin
-            $table->boolean('acceptMessage')->default(false);
+            $table->boolean('accept_message')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Override;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -14,6 +15,15 @@ class ProfileUpdateRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
+
+    #[Override]
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'accept_message' => $this->has('accept_message'),
+        ]);
+    }
+
     public function rules(): array
     {
         return [
@@ -27,7 +37,8 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            'phone' => ['nullable', 'digits_between:1,10']
+            'phone' => ['nullable', 'digits_between:1,10'],
+            'accept_message' => ['boolean']
         ];
     }
 }
