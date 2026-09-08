@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TenantController;
 use Illuminate\Foundation\Application;
@@ -31,6 +32,10 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Tenants/Dashboard');
     })->name('tenant.dashboard');
+
+    //ROUTES LEAGUES
+    Route::get('/ligas', [LeagueController::class, 'index'])->name('tenant.leagues.index');
+    Route::post('/ligas', [LeagueController::class, 'store'])->name('tenant.leagues.store');
 });
 
 require __DIR__.'/auth.php';
