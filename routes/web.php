@@ -36,6 +36,10 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
     //ROUTES LEAGUES
     Route::get('/ligas', [LeagueController::class, 'index'])->name('tenant.leagues.index');
     Route::post('/ligas', [LeagueController::class, 'store'])->name('tenant.leagues.store');
+
+    //ROUTES LEAGUES EDIT
+    Route::get('/ligas/{league}/editar', [LeagueController::class, 'edit'])->name('tenant.leagues.edit');
+    Route::put('/ligas/{league}', [LeagueController::class, 'update'])->name('tenant.leagues.update');
 });
 
 require __DIR__.'/auth.php';

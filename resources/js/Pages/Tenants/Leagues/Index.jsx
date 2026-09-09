@@ -1,6 +1,6 @@
 import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 
 export default function Index({ auth, leagues }) {
     const { currentTenant } = usePage().props;
@@ -69,10 +69,24 @@ export default function Index({ auth, leagues }) {
                     ) : (
                         <ul className="divide-y divide-gray-200">
                             {leagues.map((league) => (
-                                <li key={league.id} className="py-4">
-                                    <p className="text-sm font-medium text-gray-900">{league.name}</p>
-                                    <p className="text-sm text-gray-500">{league.description || 'Sin descripción'}</p>
-                                    <p className="text-xs text-gray-400 mt-1">Slug: {league.slug}</p>
+                                <li key={league.id} className="py-4 flex justify-between items-center">
+                                    <div>
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-sm font-medium text-gray-900">{league.name}</p>
+                                            {league.status === 'inactive' && (
+                                                <span className="px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Inactiva</span>
+                                            )}
+                                        </div>
+                                        <p className="text-sm text-gray-500">{league.description || 'Sin descripción'}</p>
+                                        <p className="text-sm text-gray-500">{league.slug || 'Sin slug'}</p>
+                                    </div>
+
+                                    <Link
+                                        href={route('tenant.leagues.edit', { tenant: currentTenant.slug, league: league.id })}
+                                        className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                                    >
+                                        Editar
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

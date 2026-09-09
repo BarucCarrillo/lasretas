@@ -9,7 +9,7 @@ class LeagueService
 {
     public function createLeague(array $data)
     {
-        $data['slug'] = Str::slug($data['name']) . '_';
+        $data['slug'] = Str::slug($data['name']) . '-';
 
         return League::create($data);
     }

@@ -12,7 +12,7 @@ class League extends Model
 {
     use BelongsToTenant;
     //
-    protected $fillable = ['name', 'description', 'logo', 'slug'];
+    protected $fillable = ['name', 'description', 'logo', 'slug', 'status'];
 
     //league belogns to a complex
     public function tenant(): BelongsTo

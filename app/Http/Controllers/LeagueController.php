@@ -32,4 +32,23 @@ class LeagueController extends Controller
 
         return redirect()->back();
     }
+
+    public function edit($tenant, League $league) : Response {
+        return Inertia::render('Tenants/Leagues/Edit', [
+            'league' => $league
+        ]);
+    }
+
+    public function update(Request $request, $tenant, League $league): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:500',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        $league->update($validated);
+
+        return redirect()->route('tenant.leagues.index')->with('success', 'Liga actualizada correctamente.');
+    }
 }
