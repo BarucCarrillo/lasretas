@@ -1,6 +1,7 @@
 import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 
 export default function Index({ auth, tournaments, leagues }) {
     const { currentTenant } = usePage().props;
@@ -159,7 +160,26 @@ export default function Index({ auth, tournaments, leagues }) {
                                             {tournament.penalties_extra_point && ' | (+1 Pto Penales)'}
                                         </p>
                                     </div>
-                                    <button className="text-sm text-indigo-600 hover:text-indigo-900">Configurar</button>
+
+                                    {/* Botones de acción */}
+                                    <div className="flex space-x-4">
+                                        <Link
+                                            href={route('tenant.tournaments.edit', { tenant: currentTenant.slug, tournament: tournament.id })}
+                                            className="text-sm text-indigo-600 hover:text-indigo-900"
+                                        >
+                                            Editar
+                                        </Link>
+                                        <button
+                                            onClick={() => {
+                                                if (confirm('¿Estás seguro de eliminar este torneo? Se borrarán partidos y estadísticas.')) {
+                                                    router.delete(route('tenant.tournaments.destroy', { tenant: currentTenant.slug, tournament: tournament.id }));
+                                                }
+                                            }}
+                                            className="text-sm text-red-600 hover:text-red-900"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </div>
                                 </li>
                             ))}
                         </ul>

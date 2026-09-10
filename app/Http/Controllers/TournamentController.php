@@ -40,4 +40,37 @@ class TournamentController extends Controller
 
         return redirect()->back()->with('success', 'Torneo creado con éxito');
     }
+
+    public function edit($tenant, Tournament $tournament): Response
+    {
+        $leagues = League::where('status', 'active')->orderBy('name')->get();
+
+        return Inertia::render('Tenants/Tournaments/Edit', [
+            'tournament' => $tournament,
+            'leagues' => $leagues
+        ]);
+    }
+
+    public function update(Request $request, $tenant, Tournament $tournament): RedirectResponse
+    {
+        $validated = $request->validate([
+            'league_id' => 'required|exists:leagues,id',
+            'name' => 'required|string|max:255',
+            'format' => 'required|in:league,liguilla,knockout',
+            'playoff_teams_count' => 'nullable|integer|min:2',
+            'penalties_extra_point' => 'boolean',
+            'is_visible' => 'boolean',
+        ]);
+
+        $tournament->update($validated);
+
+        return redirect()->route('tenant.tournaments.index')->with('success', 'Torneo actualizado con éxito.');
+    }
+
+    public function destroy($tenant, Tournament $tournament): RedirectResponse
+    {
+        $tournament->delete();
+
+        return redirect()->route('tenant.tournaments.index')->with('success', 'Torneo eliminado con éxito');
+    }
 }

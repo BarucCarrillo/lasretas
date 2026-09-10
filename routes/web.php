@@ -46,7 +46,12 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
     Route::get('/torneos', [TournamentController::class, 'index'])->name('tenant.tournaments.index');
     Route::post('/torneos', [TournamentController::class, 'store'])->name('tenant.tournaments.store');
 
-
+    //ROUTES EDIT TOURNAMENTS
+    Route::get('/torneos/{tournament}/editar', [TournamentController::class, 'edit'])->name('tenant.tournaments.edit');
+    Route::put('/torneos/{tournament}', [TournamentController::class, 'update'])->name('tenant.tournaments.update');
+    
+    //ROUTES DELETE TOURNAMENTS
+    Route::delete('/torneos/{tournament}', [TournamentController::class, 'destroy'])->name('tenant.tournaments.destroy');
 });
 
 require __DIR__.'/auth.php';
