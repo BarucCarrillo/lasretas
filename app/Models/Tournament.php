@@ -17,12 +17,15 @@ class Tournament extends Model
         'name',
         'format',
         'playoff_teams_count',
+    ];
+
+    protected $casts = [
         'penalties_extra_point',
         'is_visible'
     ];
 
     //one tournament belongs to a one league
-    public function league(): BelongsTo 
+    public function league(): BelongsTo
     {
         return $this->belongsTo(League::class);
     }

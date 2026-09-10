@@ -3,6 +3,7 @@
 use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\TournamentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,6 +41,12 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
     //ROUTES LEAGUES EDIT
     Route::get('/ligas/{league}/editar', [LeagueController::class, 'edit'])->name('tenant.leagues.edit');
     Route::put('/ligas/{league}', [LeagueController::class, 'update'])->name('tenant.leagues.update');
+
+    //ROUTES TOURNAMENTS
+    Route::get('/torneos', [TournamentController::class, 'index'])->name('tenant.tournaments.index');
+    Route::post('/torneos', [TournamentController::class, 'store'])->name('tenant.tournaments.store');
+
+
 });
 
 require __DIR__.'/auth.php';
