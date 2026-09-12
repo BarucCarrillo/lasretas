@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TournamentController;
 use Illuminate\Foundation\Application;
@@ -52,6 +53,11 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
     
     //ROUTES DELETE TOURNAMENTS
     Route::delete('/torneos/{tournament}', [TournamentController::class, 'destroy'])->name('tenant.tournaments.destroy');
+
+    //ROUTES TEAMS
+    Route::get('/equipos', [TeamController::class, 'index'])->name('tenant.teams.index');
+    Route::post('/equipos', [TeamController::class, 'store'])->name('tenant.teams.store');
+    Route::delete('/equipos/{team}', [TeamController::class, 'destroy'])->name('tenant.teams.destroy');
 });
 
 require __DIR__.'/auth.php';

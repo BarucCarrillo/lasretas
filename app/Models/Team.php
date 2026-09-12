@@ -19,6 +19,10 @@ class Team extends Model
         'is_visible'
     ];
 
+    protected $casts = [
+        'is_visible'
+    ];
+
     //one team belongs to one tournament
     public function tournament(): BelongsTo 
     {
