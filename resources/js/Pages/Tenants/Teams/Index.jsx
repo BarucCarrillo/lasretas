@@ -1,13 +1,13 @@
 import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, usePage, router } from '@inertiajs/react';
+import { Head, useForm, usePage, router, Link } from '@inertiajs/react';
 
-export default function Index({ auth, teams, tournaments , users }) {
+export default function Index({ auth, teams, tournament, league, users }) {
     const { currentTenant } = usePage().props;
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
-        tournament_id: '',
+        tournament_id: tournament ? tournament.id : '',
         captain_id: '',
         logo: null,
         is_visible: true,
@@ -15,7 +15,11 @@ export default function Index({ auth, teams, tournaments , users }) {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('tenant.teams.store', { tenant: currentTenant.slug }), {
+        post(route('tenant.teams.store', {
+            tenant: currentTenant.slug,
+            league: league.slug,
+            tournament: tournament.slug
+        }), {
             onSuccess: () => reset('name', 'logo'), // Reseteamos el nombre y logo, dejamos torneo y capitán por si quiere registrar varios rápido
         });
     };
@@ -33,7 +37,7 @@ export default function Index({ auth, teams, tournaments , users }) {
                 <div className="bg-white p-6 shadow sm:rounded-lg">
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Inscribir Nuevo Equipo</h3>
 
-                    {tournaments.length === 0 || users.length === 0 ? (
+                    {tournament.length === 0 || users.length === 0 ? (
                         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
                             <p className="text-sm text-yellow-700">
                                 Para inscribir un equipo necesitas tener al menos un <strong>Torneo Activo</strong> y un <strong>Capitán</strong> registrado.
@@ -42,45 +46,27 @@ export default function Index({ auth, teams, tournaments , users }) {
                     ) : (
                         <form onSubmit={submit} className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
-                                {/* Torneo */}
+                                {/* Capitán */}
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Torneo</label>
+                                    <label className="block text-sm font-medium text-gray-700">Asignar Capitán</label>
                                     <select
                                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        value={data.tournament_id}
-                                        onChange={e => setData('tournament_id', e.target.value)}
+                                        value={data.captain_id}
+                                        onChange={e => setData('captain_id', e.target.value)}
                                         required
                                     >
-                                        <option value="">Seleccionar...</option>
-                                        {tournaments.map(t => (
-                                            <option key={t.id} value={t.id}>{t.name}</option>
+                                        <option value="">Seleccionar usuario global...</option>
+                                        {users.map(u => (
+                                            <option key={u.id} value={u.id}>
+                                                {u.first_name} {u.last_name} ({u.email}) {u.role === 'captain' ? ' - Ya es Capitán' : ''}
+                                            </option>
                                         ))}
                                     </select>
-                                    {errors.tournament_id && <div className="text-red-500 text-sm">{errors.tournament_id}</div>}
+                                    <p className="mt-1 text-xs text-gray-500">
+                                        Si el usuario tiene rol "user", se actualizará a "captain" en toda la plataforma.
+                                    </p>
+                                    {errors.captain_id && <div className="text-red-500 text-sm">{errors.captain_id}</div>}
                                 </div>
-
-                                {/* Capitán */}
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Asignar Capitán</label>
-                                        <select
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                            value={data.captain_id}
-                                            onChange={e => setData('captain_id', e.target.value)}
-                                            required
-                                        >
-                                            <option value="">Seleccionar usuario global...</option>
-                                            {users.map(u => (
-                                                <option key={u.id} value={u.id}>
-                                                    {u.first_name} {u.last_name} ({u.email}) {u.role === 'captain' ? ' - Ya es Capitán' : ''}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <p className="mt-1 text-xs text-gray-500">
-                                            Si el usuario tiene rol "user", se actualizará a "captain" en toda la plataforma.
-                                        </p>
-                                        {errors.captain_id && <div className="text-red-500 text-sm">{errors.captain_id}</div>}
-                                    </div>
 
                                 {/* Nombre del Equipo */}
                                 <div>
@@ -155,11 +141,25 @@ export default function Index({ auth, teams, tournaments , users }) {
                                         <p className="text-xs text-gray-500">👤 {team.captain?.first_name} {team.captain?.last_name}</p>
 
                                         <div className="mt-2 flex space-x-3 text-sm">
-                                            <button className="text-indigo-600 hover:text-indigo-900">Editar</button>
-                                            <button
+                                            <Link
+                                                href={route('tenant.teams.edit', {
+                                                    tenant: currentTenant.slug,
+                                                    league: league.slug,
+                                                    tournament: tournament.slug,
+                                                    team: team.id
+                                                })}
+                                                className="text-indigo-600 hover:text-indigo-900"
+                                            >
+                                                Editar
+                                            </Link>                                            <button
                                                 onClick={() => {
                                                     if (confirm('¿Eliminar equipo? Esto afectará los partidos programados.')) {
-                                                        router.delete(route('tenant.teams.destroy', { tenant: currentTenant.slug, team: team.id }));
+                                                        router.delete(route('tenant.teams.destroy', {
+                                                            tenant: currentTenant.slug,
+                                                            league: league.slug,      
+                                                            tournament: tournament.slug,
+                                                            team: team.id
+                                                        }));
                                                     }
                                                 }}
                                                 className="text-red-600 hover:text-red-900"

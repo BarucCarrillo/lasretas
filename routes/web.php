@@ -49,16 +49,20 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
         Route::post('/torneos', [TournamentController::class, 'store'])->name('tenant.tournaments.store');
 
         //ROUTES EDIT TOURNAMENTS
-        Route::get('/torneos/{tournament}/editar', [TournamentController::class, 'edit'])->name('tenant.tournaments.edit');
-        Route::put('/torneos/{tournament}', [TournamentController::class, 'update'])->name('tenant.tournaments.update');
+        Route::get('/torneos/{tournament:slug}/editar', [TournamentController::class, 'edit'])->name('tenant.tournaments.edit');
+        Route::put('/torneos/{tournament:slug}', [TournamentController::class, 'update'])->name('tenant.tournaments.update');
 
         //ROUTES DELETE TOURNAMENTS
-        Route::delete('/torneos/{tournament}', [TournamentController::class, 'destroy'])->name('tenant.tournaments.destroy');
+        Route::delete('/torneos/{tournament:slug}', [TournamentController::class, 'destroy'])->name('tenant.tournaments.destroy');
 
-        //ROUTES TEAMS
-        Route::get('/equipos', [TeamController::class, 'index'])->name('tenant.teams.index');
-        Route::post('/equipos', [TeamController::class, 'store'])->name('tenant.teams.store');
-        Route::delete('/equipos/{team}', [TeamController::class, 'destroy'])->name('tenant.teams.destroy');
+        Route::prefix('torneos/{tournament:slug}')->group(function () {
+            //ROUTES TEAMS
+            Route::get('/equipos', [TeamController::class, 'index'])->name('tenant.teams.index');
+            Route::post('/equipos', [TeamController::class, 'store'])->name('tenant.teams.store');
+            Route::get('/equipos/{team}/editar', [TeamController::class, 'edit'])->name('tenant.teams.edit');
+            Route::put('/equipos/{team}', [TenantController::class, 'update'])->name('tenant.teams.update');
+            Route::delete('/equipos/{team}', [TeamController::class, 'destroy'])->name('tenant.teams.destroy');
+        })->scopeBindings();
     });
 });
 
