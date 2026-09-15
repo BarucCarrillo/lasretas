@@ -56,6 +56,7 @@ class TournamentController extends Controller
             'playoff_teams_count' => 'nullable|integer|min:2',
             'penalties_extra_point' => 'boolean',
             'is_visible' => 'boolean',
+            'slug' => 'required|string|max:20'
         ]);
 
         $tournament->update($validated);

@@ -17,6 +17,7 @@ class Tournament extends Model
         'name',
         'format',
         'playoff_teams_count',
+        'slug'
     ];
 
     protected $casts = [

@@ -139,6 +139,9 @@ export default function Index({ auth, tournaments, league }) {
                                             Formato: {tournament.format}
                                             {tournament.penalties_extra_point && ' | (+1 Pto Penales)'}
                                         </p>
+                                        <p className="text-sm text-gray-500">
+                                            Slug: {tournament.slug}
+                                        </p>
                                     </div>
 
                                     {/* Botones de acción (Actualizados con la liga) */}

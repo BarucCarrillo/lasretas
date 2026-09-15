@@ -11,6 +11,7 @@ export default function Edit({ auth, tournament, league }) {
         playoff_teams_count: tournament.playoff_teams_count || '',
         penalties_extra_point: tournament.penalties_extra_point || false,
         is_visible: tournament.is_visible || false,
+        slug: tournament.slug || ''
     });
 
     const submit = (e) => {
@@ -71,6 +72,19 @@ export default function Edit({ auth, tournament, league }) {
                                     />
                                 </div>
                             )}
+
+                            {/* Slug*/}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Slug</label>
+                                <input
+                                    type="text"
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    value={data.slug}
+                                    onChange={e => setData('slug', e.target.value)}
+                                    required
+                                />
+                                {errors.name && <div className="text-red-500 text-sm mt-1">{errors.slug}</div>}
+                            </div>
                         </div>
 
                         <div className="flex gap-6 mt-4">
