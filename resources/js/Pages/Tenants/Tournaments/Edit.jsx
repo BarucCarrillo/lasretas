@@ -2,11 +2,10 @@ import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, usePage, Link } from '@inertiajs/react';
 
-export default function Edit({ auth, tournament, leagues }) {
+export default function Edit({ auth, tournament, league }) {
     const { currentTenant } = usePage().props;
 
     const { data, setData, put, processing, errors } = useForm({
-        league_id: tournament.league_id || '',
         name: tournament.name || '',
         format: tournament.format || 'liguilla',
         playoff_teams_count: tournament.playoff_teams_count || '',
@@ -16,13 +15,13 @@ export default function Edit({ auth, tournament, leagues }) {
 
     const submit = (e) => {
         e.preventDefault();
-        put(route('tenant.tournaments.update', { tenant: currentTenant.slug, tournament: tournament.id }));
+        put(route('tenant.tournaments.update', { tenant: currentTenant.slug, tournament: tournament.id, league: league.slug }));
     };
 
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800">Editar Torneo: {tournament.name}</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800">Editar Torneo: {tournament.name} - {league.name}</h2>}
         >
             <Head title={`Editar ${tournament.name}`} />
 
@@ -31,22 +30,6 @@ export default function Edit({ auth, tournament, leagues }) {
 
                     <form onSubmit={submit} className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* Liga */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Liga a la que pertenece</label>
-                                <select
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                    value={data.league_id}
-                                    onChange={e => setData('league_id', e.target.value)}
-                                    required
-                                >
-                                    <option value="">Selecciona una Liga...</option>
-                                    {leagues.map(league => (
-                                        <option key={league.id} value={league.id}>{league.name}</option>
-                                    ))}
-                                </select>
-                                {errors.league_id && <div className="text-red-500 text-sm mt-1">{errors.league_id}</div>}
-                            </div>
 
                             {/* Nombre */}
                             <div>
@@ -114,7 +97,7 @@ export default function Edit({ auth, tournament, leagues }) {
 
                         <div className="flex items-center justify-end gap-4 mt-6">
                             <Link
-                                href={route('tenant.tournaments.index', { tenant: currentTenant.slug })}
+                                href={route('tenant.tournaments.index', { tenant: currentTenant.slug, league: league.slug })}
                                 className="text-sm text-gray-600 hover:text-gray-900"
                             >
                                 Cancelar

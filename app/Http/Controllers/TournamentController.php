@@ -13,22 +13,19 @@ use Inertia\Response;
 class TournamentController extends Controller
 {
     //
-    public function index(): Response
+    public function index($tenant, League $league): Response
     {
-        $tournaments = Tournament::with('league')->latest()->get();
-
-        $leagues = League::where('status', 'active')->orderBy('name')->get();
+        $tournaments = Tournament::where('league_id', $league->id)->latest()->get();
 
         return Inertia::render('Tenants/Tournaments/Index', [
             'tournaments' => $tournaments,
-            'leagues' => $leagues 
+            'league' => $league
         ]);
     }
 
-    public function store(Request $request, TournamentService $tournamentService): RedirectResponse
+    public function store(Request $request, $tenant, League $league, TournamentService $tournamentService): RedirectResponse
     {
         $validated = $request->validate([
-            'league_id' => 'required|exists:leagues,id',
             'name' => 'required|string|max:255',
             'format' => 'required|in:league,liguilla,knockout',
             'playoff_teams_count' => 'nullable|integer|min:2',
@@ -36,25 +33,24 @@ class TournamentController extends Controller
             'is_visible' => 'boolean',
         ]);
 
+        $validated['league_id'] = $league->id;
+
         $tournamentService->createTournament($validated);
 
         return redirect()->back()->with('success', 'Torneo creado con éxito');
     }
 
-    public function edit($tenant, Tournament $tournament): Response
+    public function edit($tenant, League $league, Tournament $tournament): Response
     {
-        $leagues = League::where('status', 'active')->orderBy('name')->get();
-
         return Inertia::render('Tenants/Tournaments/Edit', [
             'tournament' => $tournament,
-            'leagues' => $leagues
+            'league' => $league
         ]);
     }
 
-    public function update(Request $request, $tenant, Tournament $tournament): RedirectResponse
+    public function update(Request $request, $tenant, League $league, Tournament $tournament): RedirectResponse
     {
         $validated = $request->validate([
-            'league_id' => 'required|exists:leagues,id',
             'name' => 'required|string|max:255',
             'format' => 'required|in:league,liguilla,knockout',
             'playoff_teams_count' => 'nullable|integer|min:2',
@@ -64,13 +60,19 @@ class TournamentController extends Controller
 
         $tournament->update($validated);
 
-        return redirect()->route('tenant.tournaments.index')->with('success', 'Torneo actualizado con éxito.');
+        return redirect()->route('tenant.tournaments.index', [
+            'tenant' => $tenant,
+            'league' => $league->slug
+        ])->with('success', 'Torneo actualizado con éxito.');
     }
 
-    public function destroy($tenant, Tournament $tournament): RedirectResponse
+    public function destroy($tenant, League $league, Tournament $tournament): RedirectResponse
     {
         $tournament->delete();
 
-        return redirect()->route('tenant.tournaments.index')->with('success', 'Torneo eliminado con éxito');
+        return redirect()->route('tenant.tournaments.index', [
+            'tenant' => $tenant,
+            'league' => $league->slug
+        ])->with('success', 'Torneo eliminado con éxito');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\League;
 use App\Models\Team;
 use App\Models\Tournament;
 use App\Models\User;
@@ -14,13 +15,17 @@ use Inertia\Response;
 class TeamController extends Controller
 {
     //
-    public function index(): Response
+    public function index($tenant, League $league): Response
     {
-        $tenant = app('tenant');
 
-        $teams = Team::with(['tournament', 'captain'])->latest()->get();
+        $teams = Team::whereHas('tournament', function ($query) use ($league) {
+            $query->where('league_id', $league->id);
+        })->with(['tournament', 'captain'])->latest()->get();
 
-        $tournaments = Tournament::where('is_visible', true)->orderBy('name')->get();
+        $tournaments = Tournament::where('league_id', $league->id)
+            ->where('is_visible', true)
+            ->orderBy('name')
+            ->get();
 
         $users = User::select('id', 'first_name', 'last_name', 'email', 'role')
             ->orderBy('first_name')
@@ -29,11 +34,12 @@ class TeamController extends Controller
         return Inertia::render('Tenants/Teams/Index', [
             'teams' => $teams,
             'tournaments' => $tournaments,
-            'users' => $users
+            'users' => $users,
+            'league' => $league
         ]);
     }
 
-    public function store(Request $request, TeamService $teamService): RedirectResponse
+    public function store(Request $request, $tenant, League $league, TeamService $teamService): RedirectResponse
     {
         $validated = $request->validate([
             'tournament_id' => 'required|exists:tournaments,id',
@@ -48,7 +54,7 @@ class TeamController extends Controller
         return redirect()->back()->with('success', 'Equipo creado y asignado con éxito.');
     }
 
-    public function destroy(Team $team)
+    public function destroy($tenant, League $league, Team $team)
     {
         if ($team->logo) {
             \Illuminate\Support\Facades\Storage::disk('public')->delete($team->logo);
