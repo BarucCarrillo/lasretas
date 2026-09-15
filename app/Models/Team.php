@@ -16,7 +16,8 @@ class Team extends Model
         'captain_id',
         'name',
         'logo',
-        'is_visible'
+        'is_visible',
+        'slug'
     ];
 
     protected $casts = [

@@ -150,7 +150,7 @@ export default function Index({ auth, tournaments, league }) {
                                             href={route('tenant.tournaments.edit', {
                                                 tenant: currentTenant.slug,
                                                 league: league.slug,
-                                                tournament: tournament.id
+                                                tournament: tournament.slug
                                             })}
                                             className="text-sm text-indigo-600 hover:text-indigo-900"
                                         >
@@ -162,7 +162,7 @@ export default function Index({ auth, tournaments, league }) {
                                                     router.delete(route('tenant.tournaments.destroy', {
                                                         tenant: currentTenant.slug,
                                                         league: league.slug,
-                                                        tournament: tournament.id
+                                                        tournament: tournament.slug
                                                     }));
                                                 }
                                             }}

@@ -139,6 +139,7 @@ export default function Index({ auth, teams, tournament, league, users }) {
                                         <h4 className="text-md font-bold text-gray-900">{team.name}</h4>
                                         <p className="text-xs text-gray-500">🏆 {team.tournament?.name}</p>
                                         <p className="text-xs text-gray-500">👤 {team.captain?.first_name} {team.captain?.last_name}</p>
+                                        <p className="text-xs text-gray-500">Slug: {team.slug}</p>
 
                                         <div className="mt-2 flex space-x-3 text-sm">
                                             <Link
@@ -146,7 +147,7 @@ export default function Index({ auth, teams, tournament, league, users }) {
                                                     tenant: currentTenant.slug,
                                                     league: league.slug,
                                                     tournament: tournament.slug,
-                                                    team: team.id
+                                                    team: team.slug
                                                 })}
                                                 className="text-indigo-600 hover:text-indigo-900"
                                             >
@@ -158,7 +159,7 @@ export default function Index({ auth, teams, tournament, league, users }) {
                                                             tenant: currentTenant.slug,
                                                             league: league.slug,      
                                                             tournament: tournament.slug,
-                                                            team: team.id
+                                                            team: team.slug
                                                         }));
                                                     }
                                                 }}

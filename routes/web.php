@@ -43,7 +43,7 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
     Route::get('/ligas/{league}/editar', [LeagueController::class, 'edit'])->name('tenant.leagues.edit');
     Route::put('/ligas/{league}', [LeagueController::class, 'update'])->name('tenant.leagues.update');
 
-    Route::prefix('{league:slug}')->group(function () {
+    Route::prefix('ligas/{league:slug}')->group(function () {
         //ROUTES TOURNAMENTS
         Route::get('/torneos', [TournamentController::class, 'index'])->name('tenant.tournaments.index');
         Route::post('/torneos', [TournamentController::class, 'store'])->name('tenant.tournaments.store');
@@ -59,7 +59,7 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
             //ROUTES TEAMS
             Route::get('/equipos', [TeamController::class, 'index'])->name('tenant.teams.index');
             Route::post('/equipos', [TeamController::class, 'store'])->name('tenant.teams.store');
-            Route::get('/equipos/{team}/editar', [TeamController::class, 'edit'])->name('tenant.teams.edit');
+            Route::get('/equipos/{team:slug}/editar', [TeamController::class, 'edit'])->name('tenant.teams.edit');
             Route::put('/equipos/{team}', [TenantController::class, 'update'])->name('tenant.teams.update');
             Route::delete('/equipos/{team}', [TeamController::class, 'destroy'])->name('tenant.teams.destroy');
         })->scopeBindings();

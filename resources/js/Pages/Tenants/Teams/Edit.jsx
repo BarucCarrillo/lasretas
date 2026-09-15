@@ -19,7 +19,7 @@ export default function Edit({ auth, team, tournament, league, users }) {
             tenant: currentTenant.slug,
             league: league.slug,
             tournament: tournament.slug,
-            team: team.id
+            team: team.slug
         }));
     };
 

@@ -16,7 +16,7 @@ export default function Edit({ auth, tournament, league }) {
 
     const submit = (e) => {
         e.preventDefault();
-        put(route('tenant.tournaments.update', { tenant: currentTenant.slug, tournament: tournament.id, league: league.slug }));
+        put(route('tenant.tournaments.update', { tenant: currentTenant.slug, tournament: tournament.slug, league: league.slug }));
     };
 
     return (
