@@ -35,7 +35,7 @@ class TeamController extends Controller
         ]);
     }
 
-    public function store(Request $request, $tenant, League $league, Tournament $tournament, TeamService $teamService): RedirectResponse
+    public function store(Request $request, $tenant, League $league, Team $team, Tournament $tournament, TeamService $teamService): RedirectResponse
     {
         $validated = $request->validate([
             'captain_id' => 'required|exists:users,id',
@@ -71,7 +71,7 @@ class TeamController extends Controller
 
         $team->update($validated); 
 
-        return redirect()->redirect()->route('tenant.teams.index', [
+        return redirect()->route('tenant.teams.index', [
             'tenant' => $tenant,
             'league' => $league->slug,
             'tournament' => $tournament->slug

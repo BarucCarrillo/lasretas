@@ -5,11 +5,15 @@ namespace App\Providers;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TeamService
 {
     public function createTeam(array $data, $logoFile = null)
     {
+        $slug = Str::slug($data['name']);
+        $data['slug'] = $slug . '-' . rand(1000, 9999);
+        
         if ($logoFile) {
             $data['logo'] = $logoFile->store('teams', 'public');
         }

@@ -4,6 +4,7 @@ import { Head, useForm, usePage, router, Link } from '@inertiajs/react';
 
 export default function Index({ auth, teams, tournament, league, users }) {
     const { currentTenant } = usePage().props;
+    console.log('Props recibidas por Inertia:', auth, teams, tournament, league, users);
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
@@ -18,7 +19,8 @@ export default function Index({ auth, teams, tournament, league, users }) {
         post(route('tenant.teams.store', {
             tenant: currentTenant.slug,
             league: league.slug,
-            tournament: tournament.slug
+            tournament: tournament.slug,
+            team: teams.slug
         }), {
             onSuccess: () => reset('name', 'logo'), // Reseteamos el nombre y logo, dejamos torneo y capitán por si quiere registrar varios rápido
         });
@@ -152,12 +154,13 @@ export default function Index({ auth, teams, tournament, league, users }) {
                                                 className="text-indigo-600 hover:text-indigo-900"
                                             >
                                                 Editar
-                                            </Link>                                            <button
+                                            </Link>                                            
+                                            <button
                                                 onClick={() => {
                                                     if (confirm('¿Eliminar equipo? Esto afectará los partidos programados.')) {
                                                         router.delete(route('tenant.teams.destroy', {
                                                             tenant: currentTenant.slug,
-                                                            league: league.slug,      
+                                                            league: league.slug,
                                                             tournament: tournament.slug,
                                                             team: team.slug
                                                         }));
