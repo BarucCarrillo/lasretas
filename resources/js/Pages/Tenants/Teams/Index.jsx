@@ -4,7 +4,6 @@ import { Head, useForm, usePage, router, Link } from '@inertiajs/react';
 
 export default function Index({ auth, teams, tournament, league, users }) {
     const { currentTenant } = usePage().props;
-    console.log('Props recibidas por Inertia:', auth, teams, tournament, league, users);
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',

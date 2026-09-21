@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LeagueController;
+use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TenantController;
@@ -62,6 +63,11 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
             Route::get('/equipos/{team:slug}/editar', [TeamController::class, 'edit'])->name('tenant.teams.edit');
             Route::put('/equipos/{team:slug}', [TeamController::class, 'update'])->name('tenant.teams.update');
             Route::delete('/equipos/{team:slug}', [TeamController::class, 'destroy'])->name('tenant.teams.destroy');
+            //ROUTES PLAYERS
+            Route::prefix('equipos/{team:slug}')->group(function () {
+                Route::get('/jugadores', [PlayerController::class, 'index'])->name('tenant.players.index');
+                Route::post('/jugadores', [PlayerController::class, 'store'])->name('tenant.players.store');
+            });
         })->scopeBindings();
     });
 });

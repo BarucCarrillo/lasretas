@@ -54,11 +54,14 @@ class TeamController extends Controller
     public function edit($tenant, League $league, Tournament $tournament, Team $team) {
         $users = User::select('id', 'first_name', 'last_name', 'email')->orderBy('first_name')->get();
 
+        $players = $team->players()->orderBy('name')->get();
+
         return Inertia::render('Tenants/Teams/Edit', [
             'team' => $team,
             'users' => $users,
             'league' => $league,
-            'tournament' => $tournament
+            'tournament' => $tournament,
+            'players' => $players
         ]);
     }
 
