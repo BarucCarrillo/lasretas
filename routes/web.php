@@ -67,6 +67,7 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
             Route::prefix('equipos/{team:slug}')->group(function () {
                 Route::get('/jugadores', [PlayerController::class, 'index'])->name('tenant.players.index');
                 Route::post('/jugadores', [PlayerController::class, 'store'])->name('tenant.players.store');
+                Route::put('/jugadores/{player:id}', [PlayerController::class, 'update'])->name('tenant.players.update');
             });
         })->scopeBindings();
     });

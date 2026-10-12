@@ -6,6 +6,7 @@ use App\Models\League;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\Tournament;
+use App\Models\User;
 use App\Providers\PlayerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,5 +44,20 @@ class PlayerController extends Controller
         $playerService->createPlayer($validated);
 
         return redirect()->back()->with('success', 'Jugadores añadidos correctamente.');
+    }
+
+    public function update(Request $request, $tenant, League $league, Tournament $tournament, Team $team, Player $player)
+    {
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:20',
+            'jersey_number' => 'required|digits:2',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'is_visible' => 'boolean',
+        ]);
+
+        $player->update($validated);
+
+        return redirect()->back()->with('success', 'Jugador actualizado correctamente.');
     }
 }

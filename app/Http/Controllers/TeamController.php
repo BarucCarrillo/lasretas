@@ -68,6 +68,7 @@ class TeamController extends Controller
     public function update(Request $request, $tenant, League $league, Tournament $tournament, Team $team) {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'captain_id' => 'required|exists:users,id',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'is_visible' => 'boolean',
         ]);
