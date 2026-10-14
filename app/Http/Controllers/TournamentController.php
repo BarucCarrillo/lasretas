@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\League;
+use App\Models\Team;
 use App\Models\Tournament;
 use App\Providers\TournamentService;
 use Illuminate\Http\RedirectResponse;
@@ -75,5 +76,19 @@ class TournamentController extends Controller
             'tenant' => $tenant,
             'league' => $league->slug
         ])->with('success', 'Torneo eliminado con éxito');
+    }
+
+    public function show($tenant, League $league, Tournament $tournament) 
+    {
+        $teams = Team::where('tournament_id', $tournament->id)
+                        ->with('captain')
+                        ->latest()
+                        ->get();
+        
+        return Inertia::render('Tenants/Tournaments/Show', [
+            'league' => $league,
+            'tournament' => $tournament,
+            'teams' => $teams
+        ]);
     }
 }

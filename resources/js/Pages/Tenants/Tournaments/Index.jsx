@@ -147,6 +147,16 @@ export default function Index({ auth, tournaments, league }) {
                                     {/* Botones de acción (Actualizados con la liga) */}
                                     <div className="flex space-x-4">
                                         <Link
+                                            href={route('tenant.tournaments.show', {
+                                                tenant: currentTenant.slug,
+                                                league: league.slug,
+                                                tournament: tournament.slug
+                                            })}
+                                            className="text-sm text-indigo-600 hover:text-indigo-900"
+                                        >
+                                            Ver Detalles
+                                        </Link>
+                                        <Link
                                             href={route('tenant.tournaments.edit', {
                                                 tenant: currentTenant.slug,
                                                 league: league.slug,

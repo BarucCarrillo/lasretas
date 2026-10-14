@@ -48,6 +48,7 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
         //ROUTES TOURNAMENTS
         Route::get('/torneos', [TournamentController::class, 'index'])->name('tenant.tournaments.index');
         Route::post('/torneos', [TournamentController::class, 'store'])->name('tenant.tournaments.store');
+        Route::get('/torneos/{tournament:slug}', [TournamentController::class, 'show'])->name('tenant.tournaments.show');
 
         //ROUTES EDIT TOURNAMENTS
         Route::get('/torneos/{tournament:slug}/editar', [TournamentController::class, 'edit'])->name('tenant.tournaments.edit');

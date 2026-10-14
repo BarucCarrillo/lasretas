@@ -1,6 +1,6 @@
 import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 
 export default function Dashboard({ auth }) {
     // 1. Extraemos los props globales que inyectó nuestro Middleware
@@ -42,6 +42,17 @@ export default function Dashboard({ auth }) {
                                     <li><strong>Plan:</strong> {currentTenant.plan}</li>
                                     <li><strong>Estado:</strong> <span className="text-green-600">{currentTenant.status}</span></li>
                                 </ul>
+                            </div>
+
+                            <div>
+                                <Link
+                                    href={route('tenant.leagues.index', {
+                                        tenant: currentTenant.slug
+                                    })}
+                                    className="text-sm text-indigo-600 hover:text-indigo-900"
+                                >
+                                    Ver Torneos
+                                </Link>
                             </div>
 
                         </div>

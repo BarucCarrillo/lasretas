@@ -82,6 +82,13 @@ export default function Index({ auth, leagues }) {
                                     </div>
 
                                     <Link
+                                        href={route('tenant.tournaments.index', { tenant: currentTenant.slug, league: league.slug })}
+                                        className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                                    >
+                                        Ver Detalles
+                                    </Link>
+                                    
+                                    <Link
                                         href={route('tenant.leagues.edit', { tenant: currentTenant.slug, league: league.id })}
                                         className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
                                     >
