@@ -147,13 +147,40 @@ export default function Edit({ auth, team, tournament, league, users, players })
                 </div>
 
                 {/* COLUMNA DERECHA: JUGADORES */}
-                {/* COLUMNA DERECHA: JUGADORES */}
                 <div className="bg-white p-6 shadow sm:rounded-lg">
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Roster de Jugadores</h3>
 
                     {/* Formulario para agregar jugador (se mantiene igual) */}
                     <form onSubmit={submitPlayer} className="mb-6 flex gap-2 items-start">
-                        {/* ... inputs de nuevo jugador ... */}
+                        <div className="flex-1">
+                            <input
+                                type="text"
+                                placeholder="Nombre del jugador"
+                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 sm:text-sm"
+                                value={playerForm.data.name}
+                                onChange={e => playerForm.setData('name', e.target.value)}
+                                required
+                            />
+                            {playerForm.errors.name && <div className="text-red-500 text-xs mt-1">{playerForm.errors.name}</div>}
+                        </div>
+                        <div className="w-20">
+                            <input
+                                type="number"
+                                placeholder="No."
+                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 sm:text-sm"
+                                value={playerForm.data.jersey_number}
+                                onChange={e => playerForm.setData('jersey_number', e.target.value)}
+                                required
+                            />
+                            {playerForm.errors.jersey_number && <div className="text-red-500 text-xs mt-1">{playerForm.errors.jersey_number}</div>}
+                        </div>
+                        <button
+                            type="submit"
+                            disabled={playerForm.processing}
+                            className="bg-gray-800 py-2 px-4 text-sm font-medium text-white rounded-md shadow-sm hover:bg-gray-900 disabled:opacity-50"
+                        >
+                            Agregar
+                        </button>
                     </form>
 
                     {/* Lista de Jugadores */}

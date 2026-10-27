@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\League;
+use App\Models\Matches;
 use App\Models\Team;
 use App\Models\Tournament;
 use App\Providers\TournamentService;
@@ -78,17 +79,23 @@ class TournamentController extends Controller
         ])->with('success', 'Torneo eliminado con éxito');
     }
 
-    public function show($tenant, League $league, Tournament $tournament) 
+    public function show($tenant, League $league, Tournament $tournament, Matches $matches) 
     {
         $teams = Team::where('tournament_id', $tournament->id)
                         ->with('captain')
                         ->latest()
                         ->get();
+
+        $matches = Matches::where('tournament_id', $tournament->id)
+            ->with(['localTeam', 'visitorTeam'])
+            ->orderBy('match_date', 'desc')
+            ->get();
         
         return Inertia::render('Tenants/Tournaments/Show', [
             'league' => $league,
             'tournament' => $tournament,
-            'teams' => $teams
+            'teams' => $teams,
+            'matches' => $matches
         ]);
     }
 }

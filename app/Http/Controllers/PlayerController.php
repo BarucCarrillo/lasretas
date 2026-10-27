@@ -51,7 +51,7 @@ class PlayerController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:20',
-            'jersey_number' => 'required|digits:2',
+            'jersey_number' => 'required',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'is_visible' => 'boolean',
         ]);

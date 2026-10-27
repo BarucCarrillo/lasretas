@@ -2,7 +2,7 @@ import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, Link } from '@inertiajs/react';
 
-export default function Show({ auth, league, tournament, teams }) {
+export default function Show({ auth, league, tournament, teams, matches }) {
     const { currentTenant } = usePage().props;
 
     return (
@@ -44,16 +44,28 @@ export default function Show({ auth, league, tournament, teams }) {
                         </p>
                     </div>
 
-                    <Link
-                        href={route('tenant.tournaments.edit', {
-                            tenant: currentTenant.slug,
-                            league: league.slug,
-                            tournament: tournament.slug
-                        })}
-                        className="text-gray-600 bg-gray-100 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-200"
-                    >
-                        Configurar Torneo
-                    </Link>
+                    <div>
+                        <Link
+                            href={route('tenant.tournaments.edit', {
+                                tenant: currentTenant.slug,
+                                league: league.slug,
+                                tournament: tournament.slug
+                            })}
+                            className="text-gray-600 bg-gray-100 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-200"
+                        >
+                            Configurar Torneo
+                        </Link>
+                        <Link
+                            href={route('tenant.matches.index', {
+                                tenant: currentTenant.slug,
+                                league: league.slug,
+                                tournament: tournament.slug
+                            })}
+                            className="text-gray-100 bg-indigo-600 px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
+                        >
+                            Crear Partido
+                        </Link>
+                    </div>
                 </div>
 
                 {/* 2. SECCIÓN: EQUIPOS INSCRITOS */}
@@ -117,6 +129,70 @@ export default function Show({ auth, league, tournament, teams }) {
                     )}
                 </div>
 
+                <div className="bg-white p-6 shadow sm:rounded-lg">
+                    <div className="flex justify-between items-center mb-6 border-b pb-2">
+                        <h3 className="text-lg font-medium text-gray-900">
+                            Calendario de Partidos ({matches?.length || 0})
+                        </h3>
+                        <Link
+                            href={route('tenant.matches.index', {
+                                tenant: currentTenant.slug,
+                                league: league.slug,
+                                tournament: tournament.slug
+                            })}
+                            className="text-sm text-indigo-600 hover:text-indigo-900 font-medium"
+                        >
+                            Ver todos los partidos &rarr;
+                        </Link>
+                    </div>
+
+                    {!matches || matches.length === 0 ? (
+                        <div className="text-center py-10">
+                            <p className="text-gray-500 mb-4">No hay partidos programados en este torneo todavía.</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col space-y-3">
+                            {matches.map((match) => (
+                                <div key={match.id} className="border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row justify-between items-center bg-gray-50 hover:bg-white transition duration-150 gap-4">
+
+                                    {/* Fecha y Tipo */}
+                                    <div className="text-sm text-gray-500 flex flex-col items-center sm:items-start min-w-[120px]">
+                                        <span className="font-semibold text-gray-700">
+                                            {new Date(match.match_date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                        </span>
+                                        <span className="text-xs uppercase bg-gray-200 px-2 py-0.5 rounded mt-1">
+                                            {match.match_type.replace('_', ' ')}
+                                        </span>
+                                    </div>
+
+                                    {/* Equipos y Marcador (Si existe) */}
+                                    <div className="flex items-center space-x-4 flex-grow justify-center">
+                                        <div className="text-right font-bold text-gray-900 w-1/3">
+                                            {match.local_team?.name || 'Local'}
+                                        </div>
+                                        <div className="bg-gray-800 text-white px-3 py-1 rounded font-mono text-lg flex items-center justify-center min-w-[70px]">
+                                            {match.status === 'completed'
+                                                ? `${match.local_score} - ${match.visitor_score}`
+                                                : 'VS'
+                                            }
+                                        </div>
+                                        <div className="text-left font-bold text-gray-900 w-1/3">
+                                            {match.visitor_team?.name || 'Visitante'}
+                                        </div>
+                                    </div>
+
+                                    {/* Estado */}
+                                    <div className="min-w-[100px] text-right">
+                                        {match.status === 'scheduled' && <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-medium">Programado</span>}
+                                        {match.status === 'completed' && <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">Finalizado</span>}
+                                        {match.status === 'canceled' && <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full font-medium">Cancelado</span>}
+                                    </div>
+
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </AuthenticatedLayout>
     );
