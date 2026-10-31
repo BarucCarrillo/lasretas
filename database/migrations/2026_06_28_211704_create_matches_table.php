@@ -40,6 +40,9 @@ return new class extends Migration
             //gruop legs
             $table->string('round_group')->nullable();
 
+            //matchday
+            $table->unsignedInteger('matchday')->comment('Número de Jornada');
+
             //standigs
             $table->integer('local_score')->nullable();
             $table->integer('visitor_score')->nullable();

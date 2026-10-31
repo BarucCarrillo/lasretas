@@ -18,8 +18,10 @@ class MatchController extends Controller
 
         $matches = Matches::where('tournament_id', $tournament->id)
             ->with(['localTeam', 'visitorTeam'])
-            ->orderBy('match_date', 'desc')
-            ->get();
+            ->orderBy('matchday', 'asc')
+            ->orderBy('match_date', 'asc')
+            ->get()
+            ->groupBy('matchday');
 
         return Inertia::render('Tenants/Matches/Index', [
             'league' => $league,
@@ -34,9 +36,22 @@ class MatchController extends Controller
         $validated = $request->validate([
             'local_team_id' => 'required|exists:teams,id|different:visitor_team_id',
             'visitor_team_id' => 'required|exists:teams,id',
-            'match_date' => 'required|date',
             'match_type' => 'required|in:regular_season,round_of_16,quarterfinals,semifinals,final',
             'round_group' => 'nullable|string|max:50',
+            'match_date' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) use ($tournament) {
+                    $conflict = Matches::where('tournament_id', $tournament->id)
+                        ->where('match_date', $value)
+                        ->exists();
+
+                    if ($conflict){
+                        $fail('Ya hay un partido programadoa esta misma fecha y hora.');
+                    };
+                }
+            ],
+            'matchday' => 'required'
         ], [
             'local_team_id.different' => 'El equipo local y visitante no pueden ser el mismo.'
         ]);

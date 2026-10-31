@@ -101,7 +101,19 @@ export default function Index({ auth, league, tournament, teams, matches }) {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Jornada / Grupo (Opcional)</label>
+                            <label className="block text-sm font-medium text-gray-700">Jornada</label>
+                            <input
+                                type="number"
+                                min="1"
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 sm:text-sm"
+                                value={data.matchday}
+                                onChange={e => setData('matchday', e.target.value)}
+                                placeholder="Ej. 1"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Información Adicional (Opcional)</label>
                             <input
                                 type="text"
                                 placeholder="Ej. Jornada 1, Grupo A..."
@@ -127,37 +139,49 @@ export default function Index({ auth, league, tournament, teams, matches }) {
                 <div className="bg-white p-6 shadow sm:rounded-lg lg:col-span-2">
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Calendario de Partidos</h3>
 
-                    {matches.length === 0 ? (
+                    {!matches || Object.keys(matches).length === 0 ? (
                         <p className="text-gray-500 text-center py-8">Aún no hay partidos programados.</p>
                     ) : (
                         <div className="space-y-4">
-                            {matches.map(match => (
-                                <div key={match.id} className="border border-gray-200 rounded-lg p-4 flex justify-between items-center bg-gray-50 hover:bg-white transition">
+                                {Object.entries(matches).map(([matchday, matchesList]) => (
+                                    <div key={`matchday-${matchday}`} className="mb-6">
 
-                                    <div className="flex-1 text-right pr-4 font-bold text-gray-800">
-                                        {match.local_team.name}
+                                        {/* Encabezado de la Jornada */}
+                                        <div className="bg-gray-800 text-white px-4 py-2 rounded-t-md font-semibold flex justify-between items-center">
+                                            <span>
+                                                {matchday === 'null' || matchday === ''
+                                                    ? 'Partidos sin jornada asignada / Liguilla'
+                                                    : `Jornada ${matchday}`
+                                                }
+                                            </span>
+                                            <span className="text-xs bg-gray-600 px-2 py-1 rounded-full">
+                                                {matchesList.length} partidos
+                                            </span>
+                                        </div>
+
+                                        {/* Lista de partidos por jornada */}
+                                        <div className="border border-t-0 border-gray-200 rounded-b-md p-4 space-y-3">
+                                            {matchesList.map(match => (
+                                                <div key={match.id} className="flex justify-between items-center bg-gray-50 p-3 rounded hover:bg-gray-100 transition">
+                                                    <div className="flex-1 text-right pr-4 font-bold text-gray-800">
+                                                        {match.local_team?.name}
+                                                    </div>
+                                                    <div className="flex flex-col items-center min-w-[120px]">
+                                                        <span className="text-xs font-mono bg-gray-200 px-2 py-1 rounded">
+                                                            {new Date(match.match_date).toLocaleString('es-MX', {
+                                                                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex-1 text-left pl-4 font-bold text-gray-800">
+                                                        {match.visitor_team?.name}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
                                     </div>
-
-                                    <div className="flex flex-col items-center justify-center px-4 border-x border-gray-200 min-w-[140px]">
-                                        <span className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-                                            {match.match_type.replace('_', ' ')}
-                                        </span>
-                                        <span className="text-sm bg-gray-800 text-white px-3 py-1 rounded-full font-mono">
-                                            {new Date(match.match_date).toLocaleString('es-MX', {
-                                                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                                            })}
-                                        </span>
-                                        {match.status === 'scheduled' && (
-                                            <span className="text-xs text-blue-600 mt-1">Programado</span>
-                                        )}
-                                    </div>
-
-                                    <div className="flex-1 text-left pl-4 font-bold text-gray-800">
-                                        {match.visitor_team.name}
-                                    </div>
-
-                                </div>
-                            ))}
+                                ))}
                         </div>
                     )}
                 </div>

@@ -22,6 +22,7 @@ class Matches extends Model
         'match_type',
         'leg',
         'round_group',
+        'matchday',
         'local_score',
         'visitor_score',
         'local_penalties',

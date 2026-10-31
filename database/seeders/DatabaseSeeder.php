@@ -138,6 +138,7 @@ class DatabaseSeeder extends Seeder
             'match_date' => now()->subDays(1), // Se jugó ayer
             'status' => 'finished',
             'match_type' => 'regular_season',
+            'matchday' => 1,
             'local_score' => 1,
             'visitor_score' => 0,
         ]);
