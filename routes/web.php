@@ -68,6 +68,8 @@ Route::middleware(['auth', 'tenant'])->prefix('{tenant}')->group(function () {
             //ROUTES MATCHES
             Route::get('/partidos', [MatchController::class, 'index'])->name('tenant.matches.index');
             Route::post('/partidos', [MatchController::class, 'store'])->name('tenant.matches.store');
+            Route::get('/partido/{match}/editar', [MatchController::class, 'edit'])->name('tenant.matches.edit');
+            Route::put('/partido/{match}/editar', [MatchController::class, 'update'])->name('tenant.matches.update');
             //ROUTES PLAYERS
             Route::prefix('equipos/{team:slug}')->group(function () {
                 Route::get('/jugadores', [PlayerController::class, 'index'])->name('tenant.players.index');
