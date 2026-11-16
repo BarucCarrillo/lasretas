@@ -34,8 +34,42 @@ class MatchController extends Controller
     public function store(Request $request, $tenant, League $league, Tournament $tournament)
     {
         $validated = $request->validate([
-            'local_team_id' => 'required|exists:teams,id|different:visitor_team_id',
-            'visitor_team_id' => 'required|exists:teams,id',
+            'local_team_id' => [
+                'required','exists:teams,id','different:visitor_team_id',
+                function ($attribute, $value, $fail) use ($request, $tournament) {
+                    if (!$request->matchday) return;
+
+                    $conflict = Matches::where('tournament_id', $tournament->id)
+                        ->where('matchday', $request->matchday)
+                        ->where(function ($query) use ($value) {
+                            $query->where('local_team_id', $value)
+                                ->orWhere('visitor_team_id', $value);
+                        })
+                        ->exists();
+
+                    if ($conflict) {
+                        $fail("El equipo local ya tiene un partido asignado para la jornada {$request->matchday}");
+                    }
+                },
+            ],
+            'visitor_team_id' => [
+                'required','exists:teams,id',
+                function ($attribute, $value, $fail) use ($request, $tournament) {
+                    if (!$request->matchday) return;
+
+                    $conflict = Matches::where('tournament_id', $tournament->id)
+                        ->where('matchday', $request->matchday)
+                        ->where(function ($query) use ($value) {
+                            $query->where('local_team_id', $value)
+                                ->orWhere('visitor_team_id', $value);
+                        })
+                        ->exists();
+
+                    if ($conflict) {
+                        $fail("El equipo visitante ya tiene un partido asignado para la jornada {$request->matchday}");
+                    }
+                },
+            ],
             'match_type' => 'required|in:regular_season,round_of_16,quarterfinals,semifinals,final',
             'round_group' => 'nullable|string|max:50',
             'match_date' => [
@@ -46,7 +80,7 @@ class MatchController extends Controller
                         ->where('match_date', $value)
                         ->exists();
 
-                    if ($conflict){
+                    if ($conflict) {
                         $fail('Ya hay un partido programadoa esta misma fecha y hora.');
                     };
                 }
